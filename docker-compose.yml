@@ -1,0 +1,9 @@
+version: '3.0'
+services:
+  broker:
+    image: rabbitmq
+    ports:
+      - 5672:5672
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=1234
