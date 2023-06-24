@@ -6,6 +6,22 @@ import getpass
 import argparse
 
 
+def get_credentials(username):
+    """Retrive password when username is specified"""
+    if username:
+        try:
+            password = getpass.getpass(prompt='Password: ', stream=None)
+        except getpass.GetPassWarning as e:
+            print(f"{e}")
+            sys.exit(1)
+        else:
+            credentials = pika.PlainCredentials(args.user, password)
+
+            return credentials
+    else:
+        return None
+
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(prog='Consumer')
@@ -15,16 +31,11 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.user:
-        try:
-            password = getpass.getpass(prompt='Password: ', stream=None)
-        except getpass.GetPassWarning as e:
-            print(f"{e}")
-            sys.exit(1)
-        else:
-            credentials = pika.PlainCredentials(args.user, password)
-            parameters = pika.ConnectionParameters(
-                host=args.host, port=args.port, credentials=credentials)
+    credentials = get_credentials(args.user)
+
+    if credentials:
+        parameters = pika.ConnectionParameters(
+            host=args.host, port=args.port, credentials=credentials)
     else:
         parameters = pika.ConnectionParameters(host=args.host, port=args.port)
 
