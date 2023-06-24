@@ -5,7 +5,11 @@ from setuptools import setup
 
 setup(
     name="ampq",
-    version="0.0.1",
+    version="0.1",
     author="Juan Manuel Carballo",
-    author_email="jm.carb@gmail.com"
+    author_email="jm.carb@gmail.com",
+    install_requires = [
+        'pika',
+        'argparse'
+    ]
 )
