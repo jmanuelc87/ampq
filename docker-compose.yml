@@ -7,3 +7,21 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=user
       - RABBITMQ_DEFAULT_PASS=1234
+  producer:
+    build: amqp
+    command: "python /app/producer.py --host=broker --user=user"
+    environment:
+      - AMQP_PWD=1234
+      - PYTHONUNBUFFERED=1
+    restart: on-failure
+    depends_on:
+      - broker
+  consumer:
+    build: amqp
+    command: "python /app/consumer.py --host=broker --user=user"
+    environment:
+      - AMQP_PWD=1234
+      - PYTHONUNBUFFERED=1
+    restart: on-failure
+    depends_on:
+      - producer
