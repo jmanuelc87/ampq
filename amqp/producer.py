@@ -4,13 +4,19 @@ import time
 import random
 import getpass
 import argparse
+import os
 
 
 def get_credentials(username):
     """Retrive password when username is specified"""
     if username:
         try:
-            password = getpass.getpass(prompt='Password: ', stream=None)
+            if "AMQP_PWD" in os.environ:
+                # Si existe una variable de entorno la tomamos
+                password = os.environ["AMQP_PWD"]
+            else:
+                # De lo contrario la solicitamos al usuario
+                password = getpass.getpass(prompt='Password: ', stream=None)
         except getpass.GetPassWarning as e:
             print(f"{e}")
             sys.exit(1)
@@ -39,6 +45,7 @@ if __name__ == "__main__":
     else:
         parameters = pika.ConnectionParameters(host=args.host, port=args.port)
 
+    print(f"Conectando al servidor {args.host}")
     connection = pika.BlockingConnection(parameters=parameters)
     channel = connection.channel()
 
@@ -50,7 +57,8 @@ if __name__ == "__main__":
         while True:
             channel.basic_publish(exchange='test', routing_key='test', body=f'Hello World! {no}')
             no += 1
-            time.sleep(random.random() * (71/13))
+            print(f"Enviando el mensaje: {no}")
+            time.sleep(2.0) # Cambie el envio a intervalos regulares.
     except KeyboardInterrupt as e:
         print(f"closing...")
         channel.close()
