@@ -1,2 +1,4 @@
 .venv/
 .amqp/
+.iot-protocols-venv/
+.idea/

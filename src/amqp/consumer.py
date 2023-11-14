@@ -83,8 +83,8 @@ if __name__ == "__main__":
         parameters=parameters, on_open_callback=on_connected, on_close_callback=on_close)
 
     try:
-        connection.ioloop.start()
+        connection.ioloop.start() 
     except KeyboardInterrupt as e:
         # Close the connection
         connection.close()
-        connection.ioloop.start()
+        connection.ioloop.start() 
